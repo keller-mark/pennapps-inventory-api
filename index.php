@@ -9,6 +9,8 @@
         "success" => true,
         "message" => "Welcome to our PennApps API!"
       );
+
+
       echo json_encode($data);
   });
 
@@ -32,9 +34,9 @@
   });
 
 
-  Flight::route('POST /api/checkout', function(){
+  Flight::route('POST /api/checkout/@customer_id', function($customer_id){
 
-    if(isset($_POST["items"])) {
+    if(isset($_POST["items"]) && $customer_id != NULL) {
 
       $data = array(
         "success" => true,
@@ -52,7 +54,7 @@
         foreach($items as $item) {
           if(isset($item->id) && isset($item->quantity)) {
             $item_object = Items::find(intval($item->id));
-            $num_bought = $item_object->buy($item->quantity);
+            $num_bought = $item_object->buy($item->quantity, $customer_id);
             $checkout_total += $num_bought*$item_object->get('item_price');
             $item_object->save();
 
@@ -98,6 +100,98 @@
     }
   });
 
+  Flight::route('/api/merchant_info', function(){
+
+      $data = array(
+        "success" => true,
+        "message" => "Successfully found merchant info.",
+        "data" => array()
+      );
+
+      $ch = curl_init();
+
+  		curl_setopt($ch, CURLOPT_URL,"http://api.reimaginebanking.com/merchants?lat=28.273426&lng=-41.695313&rad=50&key=b1ce1c6f1d2ff56d0ac730b6136b623b");
+  		//curl_setopt($ch, CURLOPT_POST, 1);
+  		//curl_setopt($ch, CURLOPT_POSTFIELDS, $capitalOneDataString);
+  		// curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+  		// 		'Content-Type: application/json',
+  		// 		'Content-Length: ' . strlen($capitalOneDataString))
+  		// );
+
+  		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+  		$server_output = curl_exec ($ch);
+
+  		curl_close ($ch);
+
+      $server_output = json_decode($server_output);
+
+      $data["data"] = $server_output->data;
+
+
+      echo json_encode($data);
+
+  });
+
+  Flight::route('/api/customers(/@customer_id)', function($customer_id){
+
+    if($customer_id != NULL) {
+
+      $data = array(
+        "success" => true,
+        "message" => "Successfully found the specified customer.",
+        "data" => array()
+      );
+
+      $ch = curl_init();
+
+      curl_setopt($ch, CURLOPT_URL,"http://api.reimaginebanking.com/customers/" . $customer_id . "/accounts?key=b1ce1c6f1d2ff56d0ac730b6136b623b");
+      //curl_setopt($ch, CURLOPT_POST, 1);
+      //curl_setopt($ch, CURLOPT_POSTFIELDS, $capitalOneDataString);
+      // curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+      // 		'Content-Type: application/json',
+      // 		'Content-Length: ' . strlen($capitalOneDataString))
+      // );
+
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+      $server_output = curl_exec ($ch);
+
+      curl_close ($ch);
+
+      $data["data"] = json_decode($server_output);
+
+    } else {
+
+        $data = array(
+          "success" => true,
+          "message" => "Successfully found customers.",
+          "data" => array()
+        );
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL,"http://api.reimaginebanking.com/customers?key=b1ce1c6f1d2ff56d0ac730b6136b623b");
+        //curl_setopt($ch, CURLOPT_POST, 1);
+        //curl_setopt($ch, CURLOPT_POSTFIELDS, $capitalOneDataString);
+        // curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+        // 		'Content-Type: application/json',
+        // 		'Content-Length: ' . strlen($capitalOneDataString))
+        // );
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $server_output = curl_exec ($ch);
+
+        curl_close ($ch);
+
+        $data["data"] = json_decode($server_output);
+    }
+
+
+      echo json_encode($data);
+
+  });
 
 
   Flight::start();

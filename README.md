@@ -17,6 +17,6 @@ GET /api/inventory
 POST /api/checkout
 ```
 Parameters:
-Key | Value
------------- | -------------
-items | [{"id": 4, "quantity": 5},{"id": 2, "quantity": 6}]
+|Key | Value|
+|------------ | -------------|
+|items | [{"id": 4, "quantity": 5},{"id": 2, "quantity": 6}]|
