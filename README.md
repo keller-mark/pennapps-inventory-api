@@ -3,5 +3,6 @@
 ### Endpoints
 
 ##### API Welcome
-```GET /api
+```
+GET /api
 ```
