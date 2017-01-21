@@ -19,4 +19,4 @@ POST /api/checkout
 Parameters:
 |Key | Value|
 |------------ | -------------|
-|items | [{"id": 4, "quantity": 5},{"id": 2, "quantity": 6}]|
+|`items` | `[{"id": 4, "quantity": 5},{"id": 2, "quantity": 6}]`|
