@@ -4,7 +4,7 @@
   <link href="http://bootswatch.com/journal/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-
+  <title>Go Shop - Inventory</title>
   <style>
     body {
       background-image: url('https://subtlepatterns.com/patterns/brickwall.png')
