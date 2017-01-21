@@ -5,7 +5,7 @@ class Items {
 	protected static $table_name = 'inventory';
 
 	public static function findAll() {
-		$query = DB::sql("SELECT * FROM " . self::$table_name . " ORDER BY id DESC");
+			$query = DB::sql("SELECT * FROM " . self::$table_name . " ORDER BY id ASC");
 		$result = array();
 		while($row = mysqli_fetch_array($query)) {
 			$result[] = self::find($row['id']);

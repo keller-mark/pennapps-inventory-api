@@ -42,7 +42,6 @@ GET /api/merchant_info
 GET /api/customers
 ```
 
-
 ##### Find a Customer
 ```
 GET /api/customers/<customer_id>

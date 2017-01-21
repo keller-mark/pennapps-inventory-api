@@ -1,6 +1,6 @@
 <?php
 
-header('Content-Type: application/json');
+
 
 /* DEVELOPMENT ONLY */
 error_reporting(E_ALL);

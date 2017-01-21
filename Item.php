@@ -4,7 +4,7 @@ class Item extends Model {
 
 	protected $table_name = 'inventory';
 
-
+ 
 	public function buy($quantity, $customer_id) {
 		$quantity = intval($quantity);
 		$current_quantity = $this->get('quantity');

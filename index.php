@@ -5,6 +5,7 @@
   // WHERE OUR CODE GOES
 
   Flight::route('/api', function(){
+    header('Content-Type: application/json');
       $data = array(
         "success" => true,
         "message" => "Welcome to our PennApps API!"
@@ -15,6 +16,7 @@
   });
 
   Flight::route('/api/inventory', function(){
+    header('Content-Type: application/json');
       $data = array(
         "success" => true,
         "message" => "Successfully found inventory.",
@@ -26,7 +28,8 @@
           "id" => intval($item->get('id')),
           "item_name" => $item->get('item_name'),
           "item_price" => dollar_format($item->get('item_price')),
-          "quantity" => intval($item->get('quantity'))
+          "quantity" => intval($item->get('quantity')),
+          "image_url" => $item->get('image_url')
         );
 
       }
@@ -35,6 +38,7 @@
 
 
   Flight::route('POST /api/checkout/@customer_id', function($customer_id){
+    header('Content-Type: application/json');
 
     if(isset($_POST["items"]) && $customer_id != NULL) {
 
@@ -76,6 +80,7 @@
   });
 
   Flight::route('POST /api/restock', function(){
+    header('Content-Type: application/json');
 
     if(isset($_POST["items"])) {
 
@@ -101,6 +106,7 @@
   });
 
   Flight::route('/api/merchant_info', function(){
+    header('Content-Type: application/json');
 
       $data = array(
         "success" => true,
@@ -134,6 +140,7 @@
   });
 
   Flight::route('/api/customers(/@customer_id)', function($customer_id){
+    header('Content-Type: application/json');
 
     if($customer_id != NULL) {
 
@@ -192,6 +199,18 @@
       echo json_encode($data);
 
   });
+
+
+
+
+
+
+
+  include_once('frontend.php');
+
+
+
+
 
 
   Flight::start();
