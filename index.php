@@ -33,6 +33,8 @@
         );
 
       }
+
+      $data["funds"] = getShopFunds();
       echo json_encode($data);
   });
 
@@ -200,9 +202,40 @@
 
   });
 
+  Flight::route('GET /api/restock/@item_id', function($item_id){
+
+    if($item_id != NULL) {
+
+      $item_object = Items::find(intval($item_id));
+      $num_bought = $item_object->restock(100);
+      $item_object->save();
+
+      Flight::redirect('/');
+
+    }
+  });
 
 
 
+  function getShopFunds() {
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL,"http://api.reimaginebanking.com/customers/5882fe921756fc834d8eb6ab/accounts?key=b1ce1c6f1d2ff56d0ac730b6136b623b");
+    //curl_setopt($ch, CURLOPT_POST, 1);
+    //curl_setopt($ch, CURLOPT_POSTFIELDS, $capitalOneDataString);
+    // curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    // 		'Content-Type: application/json',
+    // 		'Content-Length: ' . strlen($capitalOneDataString))
+    // );
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $server_output = curl_exec ($ch);
+
+    curl_close ($ch);
+
+    return dollar_format(json_decode($server_output)[0]->balance);
+  }
 
 
 

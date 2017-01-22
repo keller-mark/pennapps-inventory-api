@@ -4,7 +4,7 @@ class Item extends Model {
 
 	protected $table_name = 'inventory';
 
- 
+
 	public function buy($quantity, $customer_id) {
 		$quantity = intval($quantity);
 		$current_quantity = $this->get('quantity');
@@ -72,7 +72,7 @@ class Item extends Model {
 			"merchant_id" => "5882e3e91756fc834d8eb684",
 			"medium" => "balance",
 			"purchase_date" => date("Y-m-d"),
-			"amount" => ($quantity * $this->get('item_price')),
+			"amount" => floatval(dollar_format($quantity * $this->get('item_price'))),
 			"description" => "" . $quantity . " " . Inflector::pluralize($this->get('item_name'))
 		);
 

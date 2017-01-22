@@ -88,6 +88,37 @@
         100% {bottom: 60%;right: 110%;}
     }
 
+    #restock-button {
+      display: none;
+      margin-top: 200px;
+    }
+    #restock-wrapper {
+      display: none;
+    }
+
+    #restock-wrapper a{
+      margin-top: 50px;
+    }
+
+    #funds-heading {
+      font-weight: normal;
+      display: inline;
+      float: right;
+      width: 100%;
+      text-align: right;
+      font-size: 18px;
+      margin-top: -18px;
+      padding-right: 12px;
+    }
+
+    #inventory-heading {
+      margin: 0 auto;
+      display: inline-block;
+      float: left;
+      text-align: center;
+      width: 100%;
+
+    }
 
   </style>
 </head>
@@ -106,9 +137,21 @@
 
 
 
-    <div class="container-fluid" id="inventory-wrapper">
+    <div class="col-xs-12" id="inventory-wrapper">
       <h3>Inventory</h3>
     </div>
+
+    <div class="col-xs-12" id="restock-wrapper">
+      <a class="btn btn-primary col-md-4 col-md-offset-4" href="/api/restock/1">Restock Bananas</a>
+      <a class="btn btn-primary col-md-4 col-md-offset-4" href="/api/restock/5">Restock Red Bull</a>
+    </div>
+
+    <div class="col-xs-12" id="restock-button">
+      <button class="btn btn-primary col-md-6 col-md-offset-3" onclick="toggleRestock();"><span>Restock</span></button>
+    </div>
+
+
+
 
     <div class="loader">
       <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
@@ -124,6 +167,7 @@
 <script>
 
 var loading = false;
+var restock_open = false;
 
 function loadInventory() {
   if(!loading) {
@@ -131,7 +175,7 @@ function loadInventory() {
     $.get("/api/inventory", function(data) {
       $(".loader").hide();
       loading = false;
-      $("#inventory-wrapper").html("<h3>Inventory</h3>");
+      $("#inventory-wrapper").html("<h3><span id='inventory-heading'>Inventory<span><span id='funds-heading'>Funds: $" + data.funds + "</span></h3>");
       for(var item in data.data) {
         console.log(item);
         var quantity = data.data[item].quantity;
@@ -140,11 +184,30 @@ function loadInventory() {
           '<div class="col-xs-6 col-sm-4 col-md-3 item ' + (quantity == 0 ? "item_oos" : "") + '"><div><div class="col-xs-12 item-image" style="background-image: url(' + data.data[item].image_url  + ');"></div><p class="item_name">' + data.data[item].item_name + '</p><p class="item_price">$' + data.data[item].item_price + '</p><p class="item_quantity">' + (quantity != 0 ? "Quantity: "+quantity : "Out of Stock")  + '</p></div></div>'
         );
       }
+      $("#restock-button").show();
 
     });
   }
 
 }
+
+
+function toggleRestock() {
+  if(!restock_open) {
+    restock_open = true;
+    $("#restock-button span").text("Close");
+    $("#inventory-wrapper").slideUp();
+    $("#restock-wrapper").show();
+  } else {
+    restock_open = false;
+    $("#restock-button span").text("Restock");
+    $("#inventory-wrapper").slideDown();
+    $("#restock-wrapper").hide();
+  }
+
+
+}
+
 
 $(document).ready(function() {
   loadInventory();
